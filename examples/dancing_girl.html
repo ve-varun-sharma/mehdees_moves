@@ -1,96 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>three.js - WebGPU - Backdrop</title>
-		<meta charset="utf-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-		/>
-		<link type="text/css" rel="stylesheet" href="main.css" />
-	</head>
-	<body>
-		<h1>Mehdee's Moves!</h1>
-		<div id="speedInput">
-		  Playback Speed:
-		  <input type="number" id="speedValue" step="0.1" value="1.0" />
-		</div>
-		<h1>Music Player</h1>
-		
-		<select id="songSelect">
-		  <!-- Add options for each song -->
-		  <option value="0">Losing it - FISHER</option>
-		  <option value="1">Stop it - FISHER</option>
-		  <!-- Add more options for other songs -->
-		</select>
-		
-		<div id="songInfo">
-		  <h2>Selected Song:</h2>
-		  <img id="albumCover" src="" alt="Album Cover">
-		  <p>Title: <span id="title"></span></p>
-		  <p>Artist: <span id="artist"></span></p>
-		  <p>BPM: <span id="bpm"></span></p>
-		</div>
-		
-		<audio id="audioPlayer" controls>
-		  Your browser does not support the audio element.
-		</audio>
-	  </body>
-	  </html>
-	  <script>
-		const testMusicData = [
-		  {
+
+<head>
+	<title>three.js - WebGPU - Backdrop</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<link type="text/css" rel="stylesheet" href="main.css" />
+</head>
+
+<body>
+	<h1>Mehdee's Moves!</h1>
+	<div id="speedInput">
+		Playback Speed:
+		<input type="number" id="speedValue" step="0.1" value="1.0" />
+	</div>
+	<h1>Music Player</h1>
+
+	<select id="songSelect">
+		<!-- Add options for each song -->
+		<option value="0">Losing it - FISHER</option>
+		<option value="1">Stop it - FISHER</option>
+		<option value="2">All I need - Slushii</option>
+		<option value="3">Hi-Lo - Kronos</option>
+		<!-- Add more options for other songs -->
+	</select>
+
+	<div id="songInfo">
+		<h2>Selected Song:</h2>
+		<img id="albumCover" src="" alt="Album Cover">
+		<p>Title: <span id="title"></span></p>
+		<p>Artist: <span id="artist"></span></p>
+		<p>BPM: <span id="bpm"></span></p>
+	</div>
+
+	<audio id="audioPlayer" controls>
+		Your browser does not support the audio element.
+	</audio>
+</body>
+
+</html>
+<script>
+	const testMusicData = [
+		{
 			title: "Losing it",
 			artist: "FISHER",
 			albumCoverUrl:
-			  "https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
+				"https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
 			bpm: 124,
 			audioUrl:
-			  "https://storage.googleapis.com/ad-auris-django-bucket/media/FISHER%20-%20Losing%20It.mp3",
-		  },
-		  {
+				"https://storage.googleapis.com/ad-auris-django-bucket/media/FISHER%20-%20Losing%20It.mp3",
+		},
+		{
 			title: "Stop it",
 			albumCoverUrl:
-			  "https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
+				"https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
 			artist: "FISHER",
+			bpm: 122,
+			audioUrl:
+				"https://storage.googleapis.com/ad-auris-django-bucket/media/Fisher_-_Stop_It_Original_Mix%5BMp3Converter.n.mp3",
+		},
+		{
+			title: "All I need",
+			albumCoverUrl:
+				"https://i1.sndcdn.com/artworks-000232209212-j1x0c8-t500x500.jpg",
+			artist: "Slushii",
 			bpm: 125,
 			audioUrl:
-			  "https://storage.googleapis.com/ad-auris-django-bucket/media/Fisher_-_Stop_It_Original_Mix%5BMp3Converter.n.mp3",
-		  },
-		  // Add more song data objects
-		];
+				"https://storage.googleapis.com/ad-auris-django-bucket/media/%5BYT2mp3.info%5D%20-%20Slushii%20-%20All%20I%20Need%20%5BRocket%20League%20Intro%20Song%5D%20(128kbps).mp3",
+		},
+		{
+			title: "Kronos",
+			albumCoverUrl:
+				"https://i1.sndcdn.com/artworks-JqJpKETkyeBq1pSe-CWcQ0A-t500x500.jpg",
+			artist: "Hi-Lo",
+			bpm: 127,
+			audioUrl:
+				"https://storage.googleapis.com/ad-auris-django-bucket/media/%5BYT2mp3.info%5D%20-%20HI-LO%20-%20Kronos%20(128kbps).mp3",
+		},
+		// Add more song data objects or API call to spotify then transform data to simple data structure for app.
+
 		
-		const songSelect = document.getElementById("songSelect");
-		const albumCover = document.getElementById("albumCover");
-		const titleElement = document.getElementById("title");
-		const artistElement = document.getElementById("artist");
-		const bpmElement = document.getElementById("bpm");
-		const audioPlayer = document.getElementById("audioPlayer");
 		
-		songSelect.addEventListener("change", function() {
-		  const selectedIndex = songSelect.value;
-		  const selectedSong = testMusicData[selectedIndex];
-		  
-		  albumCover.src = selectedSong.albumCoverUrl;
-		  titleElement.textContent = selectedSong.title;
-		  artistElement.textContent = selectedSong.artist;
-		  bpmElement.textContent = selectedSong.bpm;
-		  audioPlayer.src = selectedSong.audioUrl;
+	];
 
-		   
-  
-  // Update playback speed using the selected song's bpm
-  const speed = selectedSong.bpm / 100;
- 
-		});
-	  </script>
+	const songSelect = document.getElementById("songSelect");
+	const albumCover = document.getElementById("albumCover");
+	const titleElement = document.getElementById("title");
+	const artistElement = document.getElementById("artist");
+	const audioPlayer = document.getElementById("audioPlayer");
+	const bpmElement = document.getElementById("bpm");
 
-		<script
-			async
-			src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
-		></script>
+	
+	songSelect.addEventListener("change", function () {
+		const selectedIndex = songSelect.value;
+		const selectedSong = testMusicData[selectedIndex];
 
-		<script type="importmap">
+		albumCover.src = selectedSong.albumCoverUrl;
+		titleElement.textContent = selectedSong.title;
+		artistElement.textContent = selectedSong.artist;
+		bpmElement.textContent = selectedSong.bpm;
+		audioPlayer.src = selectedSong.audioUrl;
+
+
+		// Update playback speed using the selected song's bpm
+		const speed = selectedSong.bpm / 100;
+
+
+
+	});
+</script>
+
+<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+<script type="importmap">
 			{
 				"imports": {
 					"three": "../build/three.module.js",
@@ -100,185 +122,196 @@
 			}
 		</script>
 
-		<script type="module">
-			import * as THREE from "three";
-			import {
-				float,
-				vec3,
-				color,
-				toneMapping,
-				viewportSharedTexture,
-				viewportTopLeft,
-				checker,
-				uv,
-				timerLocal,
-				oscSine,
-				output,
-				MeshStandardNodeMaterial,
-			} from "three/nodes";
+<script type="module">
+	import * as THREE from "three";
+	import {
+		float,
+		vec3,
+		color,
+		toneMapping,
+		viewportSharedTexture,
+		viewportTopLeft,
+		checker,
+		uv,
+		timerLocal,
+		oscSine,
+		output,
+		MeshStandardNodeMaterial,
+	} from "three/nodes";
 
-			import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+	import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-			import WebGPU from "three/addons/capabilities/WebGPU.js";
-			import WebGPURenderer from "three/addons/renderers/webgpu/WebGPURenderer.js";
+	import WebGPU from "three/addons/capabilities/WebGPU.js";
+	import WebGPURenderer from "three/addons/renderers/webgpu/WebGPURenderer.js";
 
-			import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+	import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-			let camera, scene, renderer;
-			let portals,
-				rotate = true;
-			let mixer, clock;
+	let camera, scene, renderer;
+	let portals,
+		rotate = true;
+	let mixer, clock;
 
-			init();
+	init();
 
-			function init() {
-				if (WebGPU.isAvailable() === false) {
-					document.body.appendChild(WebGPU.getErrorMessage());
+	function init() {
+		if (WebGPU.isAvailable() === false) {
+			document.body.appendChild(WebGPU.getErrorMessage());
 
-					throw new Error("No WebGPU support");
-				}
+			throw new Error("No WebGPU support");
+		}
 
-				camera = new THREE.PerspectiveCamera(
-					50,
-					window.innerWidth / window.innerHeight,
-					0.01,
-					100
-				);
-				camera.position.set(1, 2, 3);
+		camera = new THREE.PerspectiveCamera(
+			50,
+			window.innerWidth / window.innerHeight,
+			0.01,
+			100
+		);
+		camera.position.set(1, 2, 3);
 
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color("lightblue");
-				camera.lookAt(0, 1, 0);
+	
 
-				clock = new THREE.Clock();
 
-				//lights
+		scene = new THREE.Scene();
+		scene.background = new THREE.Color("black"); // Set background color to black
+		camera.lookAt(0, 1, 0);
 
-				const light = new THREE.SpotLight(0xffffff, 1);
-				light.power = 2000;
-				camera.add(light);
-				scene.add(camera);
+		clock = new THREE.Clock();
 
-				const loader = new GLTFLoader();
-				loader.load("models/gltf/Michelle.glb", function (gltf) {
-					const object = gltf.scene;
-					mixer = new THREE.AnimationMixer(object);
-
-					const material = object.children[0].children[0].material;
-
-					// output material effect ( better using hsv )
-					// ignore output.sRGBToLinear().linearTosRGB() for now
-
-					material.outputNode = oscSine(timerLocal(0.1)).mix(
-						output,
-						output.add(0.1).posterize(4).mul(2)
-					);
-
-					const action = mixer.clipAction(gltf.animations[0]);
-
-					// Initialize the playback speed input element
-					const speedInput = document.getElementById("bpm");
-
-					speedInput.addEventListener("bpm", () => {
-						const speed = parseFloat(speedInput.value);
-						if (!isNaN(speed)) {
-							console.log('BPM speed: ', speed)
-							action.setEffectiveTimeScale(speed);
-						}
-					});
-
-					action.play();
-
-					scene.add(object);
-				});
-
-				// portals
-
-				const geometry = new THREE.SphereGeometry(0.3, 32, 16);
-
-				portals = new THREE.Group();
-				scene.add(portals);
-
-				function addBackdropSphere(backdropNode, backdropAlphaNode = null) {
-					const distance = 1;
-					const id = portals.children.length;
-					const rotation = THREE.MathUtils.degToRad(id * 45);
-
-					const material = new MeshStandardNodeMaterial({ color: 0x0066ff });
-					material.roughnessNode = float(0.2);
-					material.metalnessNode = float(0);
-					material.backdropNode = backdropNode;
-					material.backdropAlphaNode = backdropAlphaNode;
-					material.transparent = true;
-
-					const mesh = new THREE.Mesh(geometry, material);
-					mesh.position.set(
-						Math.cos(rotation) * distance,
-						1,
-						Math.sin(rotation) * distance
-					);
-
-					portals.add(mesh);
-				}
-
-				addBackdropSphere(
-					viewportSharedTexture().bgr.hue(oscSine().mul(Math.PI))
-				);
-				addBackdropSphere(viewportSharedTexture().rgb.oneMinus());
-				addBackdropSphere(viewportSharedTexture().rgb.saturation(0));
-				addBackdropSphere(
-					viewportSharedTexture().rgb.saturation(10),
-					oscSine()
-				);
-				addBackdropSphere(
-					viewportSharedTexture().rgb.overlay(checker(uv().mul(10)))
-				);
-				addBackdropSphere(
-					viewportSharedTexture(viewportTopLeft.mul(40).floor().div(40))
-				);
-				addBackdropSphere(
-					viewportSharedTexture(viewportTopLeft.mul(80).floor().div(80)).add(
-						color(0x0033ff)
-					)
-				);
-				addBackdropSphere(vec3(0, 0, viewportSharedTexture().b));
-
-				//renderer
-
-				renderer = new WebGPURenderer();
-				renderer.setPixelRatio(window.devicePixelRatio);
-				renderer.setSize(window.innerWidth, window.innerHeight);
-				renderer.setAnimationLoop(animate);
-				renderer.toneMappingNode = toneMapping(THREE.LinearToneMapping, 0.15);
-				document.body.appendChild(renderer.domElement);
-
-				const controls = new OrbitControls(camera, renderer.domElement);
-				controls.target.set(0, 1, 0);
-				controls.addEventListener("start", () => (rotate = false));
-				controls.addEventListener("end", () => (rotate = true));
-				controls.update();
-
-				window.addEventListener("resize", onWindowResize);
-			}
-
-			function onWindowResize() {
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize(window.innerWidth, window.innerHeight);
-			}
-
-			function animate() {
-				const delta = clock.getDelta();
-
-				if (mixer) mixer.update(delta);
-
-				if (rotate) portals.rotation.y += delta * 0.5;
-
-				renderer.render(scene, camera);
-			}
-		</script>
 		
-		</div>
-	</body>
+  //lights
+
+  const light = new THREE.SpotLight(0xffffff, 1);
+		light.power = 2000;
+		camera.add(light);
+		scene.add(camera);
+
+		
+
+		const loader = new GLTFLoader();
+		loader.load("models/gltf/Michelle.glb", function (gltf) {
+			const object = gltf.scene;
+			mixer = new THREE.AnimationMixer(object);
+
+			const material = object.children[0].children[0].material;
+
+			// output material effect ( better using hsv )
+			// ignore output.sRGBToLinear().linearTosRGB() for now
+
+			material.outputNode = oscSine(timerLocal(0.1)).mix(
+				output,
+				output.add(0.1).posterize(4).mul(2)
+			);
+
+			const action = mixer.clipAction(gltf.animations[0]);
+
+			const initialBpm = 124; // Initial BPM value
+			const initialSpeed = initialBpm / 100; // Calculate initial speed
+
+			const bpmElement = document.getElementById("bpm");
+
+			const speed = parseFloat(bpmElement.textContent);
+				if (!isNaN(speed)) {
+					action.setEffectiveTimeScale(speed);
+					console.log(
+						'this is my speed!: ', speed
+					)
+				}
+			action.play();
+			scene.add(object);
+
+		});
+
+		// portals
+
+		const geometry = new THREE.SphereGeometry(0.3, 32, 16);
+
+		portals = new THREE.Group();
+		scene.add(portals);
+
+		function addBackdropSphere(backdropNode, backdropAlphaNode = null) {
+			const distance = 1;
+			const id = portals.children.length;
+			const rotation = THREE.MathUtils.degToRad(id * 45);
+
+			const material = new MeshStandardNodeMaterial({ color: 0x0066ff });
+			material.roughnessNode = float(0.2);
+			material.metalnessNode = float(0);
+			material.backdropNode = backdropNode;
+			material.backdropAlphaNode = backdropAlphaNode;
+			material.transparent = true;
+
+			const mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set(
+				Math.cos(rotation) * distance,
+				1,
+				Math.sin(rotation) * distance
+			);
+
+			portals.add(mesh);
+		}
+
+		addBackdropSphere(
+			viewportSharedTexture().bgr.hue(oscSine().mul(Math.PI))
+		);
+		addBackdropSphere(viewportSharedTexture().rgb.oneMinus());
+		addBackdropSphere(viewportSharedTexture().rgb.saturation(0));
+		addBackdropSphere(
+			viewportSharedTexture().rgb.saturation(10),
+			oscSine()
+		);
+		addBackdropSphere(
+			viewportSharedTexture().rgb.overlay(checker(uv().mul(10)))
+		);
+		addBackdropSphere(
+			viewportSharedTexture(viewportTopLeft.mul(40).floor().div(40))
+		);
+		addBackdropSphere(
+			viewportSharedTexture(viewportTopLeft.mul(80).floor().div(80)).add(
+				color(0x0033ff)
+			)
+		);
+		addBackdropSphere(vec3(0, 0, viewportSharedTexture().b));
+
+		//renderer
+
+		renderer = new WebGPURenderer();
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.setAnimationLoop(animate);
+		renderer.toneMappingNode = toneMapping(THREE.LinearToneMapping, 0.15);
+		document.body.appendChild(renderer.domElement);
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.target.set(0, 1, 0);
+		controls.addEventListener("start", () => (rotate = false));
+		controls.addEventListener("end", () => (rotate = true));
+		controls.update();
+
+		window.addEventListener("resize", onWindowResize);
+
+
+		
+	}
+
+	function onWindowResize() {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	}
+
+	function animate() {
+		const delta = clock.getDelta();
+
+		if (mixer) mixer.update(delta);
+
+		if (rotate) portals.rotation.y += delta * 0.5;
+
+		renderer.render(scene, camera);
+	}
+</script>
+
+</div>
+</body>
+
 </html>
