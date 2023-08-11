@@ -12,9 +12,78 @@
 	<body>
 		<h1>Mehdee's Moves!</h1>
 		<div id="speedInput">
-			Playback Speed:
-			<input type="number" id="speedValue" step="0.1" value="1.0" />
+		  Playback Speed:
+		  <input type="number" id="speedValue" step="0.1" value="1.0" />
 		</div>
+		<h1>Music Player</h1>
+		
+		<select id="songSelect">
+		  <!-- Add options for each song -->
+		  <option value="0">Losing it - FISHER</option>
+		  <option value="1">Stop it - FISHER</option>
+		  <!-- Add more options for other songs -->
+		</select>
+		
+		<div id="songInfo">
+		  <h2>Selected Song:</h2>
+		  <img id="albumCover" src="" alt="Album Cover">
+		  <p>Title: <span id="title"></span></p>
+		  <p>Artist: <span id="artist"></span></p>
+		  <p>BPM: <span id="bpm"></span></p>
+		</div>
+		
+		<audio id="audioPlayer" controls>
+		  Your browser does not support the audio element.
+		</audio>
+	  </body>
+	  </html>
+	  <script>
+		const testMusicData = [
+		  {
+			title: "Losing it",
+			artist: "FISHER",
+			albumCoverUrl:
+			  "https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
+			bpm: 124,
+			audioUrl:
+			  "https://storage.googleapis.com/ad-auris-django-bucket/media/FISHER%20-%20Losing%20It.mp3",
+		  },
+		  {
+			title: "Stop it",
+			albumCoverUrl:
+			  "https://e.snmc.io/i/1200/s/48fe6b7f9a0c7cfd8b6b0ae3a688259c/7147933",
+			artist: "FISHER",
+			bpm: 125,
+			audioUrl:
+			  "https://storage.googleapis.com/ad-auris-django-bucket/media/Fisher_-_Stop_It_Original_Mix%5BMp3Converter.n.mp3",
+		  },
+		  // Add more song data objects
+		];
+		
+		const songSelect = document.getElementById("songSelect");
+		const albumCover = document.getElementById("albumCover");
+		const titleElement = document.getElementById("title");
+		const artistElement = document.getElementById("artist");
+		const bpmElement = document.getElementById("bpm");
+		const audioPlayer = document.getElementById("audioPlayer");
+		
+		songSelect.addEventListener("change", function() {
+		  const selectedIndex = songSelect.value;
+		  const selectedSong = testMusicData[selectedIndex];
+		  
+		  albumCover.src = selectedSong.albumCoverUrl;
+		  titleElement.textContent = selectedSong.title;
+		  artistElement.textContent = selectedSong.artist;
+		  bpmElement.textContent = selectedSong.bpm;
+		  audioPlayer.src = selectedSong.audioUrl;
+
+		   
+  
+  // Update playback speed using the selected song's bpm
+  const speed = selectedSong.bpm / 100;
+ 
+		});
+	  </script>
 
 		<script
 			async
@@ -108,10 +177,12 @@
 					const action = mixer.clipAction(gltf.animations[0]);
 
 					// Initialize the playback speed input element
-					const speedInput = document.getElementById("speedValue");
-					speedInput.addEventListener("input", () => {
+					const speedInput = document.getElementById("bpm");
+
+					speedInput.addEventListener("bpm", () => {
 						const speed = parseFloat(speedInput.value);
 						if (!isNaN(speed)) {
+							console.log('BPM speed: ', speed)
 							action.setEffectiveTimeScale(speed);
 						}
 					});
@@ -207,5 +278,7 @@
 				renderer.render(scene, camera);
 			}
 		</script>
+		
+		</div>
 	</body>
 </html>
