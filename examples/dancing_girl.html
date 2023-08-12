@@ -10,12 +10,15 @@
 
 <body>
 	<h1>Mehdee's Moves!</h1>
-	<div id="speedInput">
-		Playback Speed:
-		<input type="number" id="speedValue" step="0.1" value="1.0" />
-	</div>
-	<h1>Music Player</h1>
+	<h3>Select a song and watch your dancer move to the beat of the song, mathching her rhythm to it!</h3>
+	<h4 color="yellow">For some users, you must activate webGPU in developer settings on google chrome. By default, this feature is not enabled in Chrome, but it can be experimented with in Chrome 113 by explicitly enabling the functionality. You can activate it locally by enabling the "WebGPU Developer Features" flag at: <a>chrome://flags/#enable-webgpu-developer-features</a> </h4>
+<p>Read more about it here: <a>https://developer.chrome.com/blog/webgpu-release/</a></p>
 
+	<h2>Choose your song!</h2>
+	
+	
+
+	
 	<select id="songSelect">
 		<!-- Add options for each song -->
 		<option value="0">Losing it - FISHER</option>
@@ -28,9 +31,9 @@
 	<div id="songInfo">
 		<h2>Selected Song:</h2>
 		<img id="albumCover" src="" alt="Album Cover">
-		<p>Title: <span id="title"></span></p>
-		<p>Artist: <span id="artist"></span></p>
-		<p>BPM: <span id="bpm"></span></p>
+		<h3>Title: <span id="title"></span></h3>
+		<h3>Artist: <span id="artist"></span></h3>
+		<h3>BPM: <span id="bpm"></span></h3>
 	</div>
 
 	<audio id="audioPlayer" controls>
@@ -172,7 +175,7 @@
 
 
 		scene = new THREE.Scene();
-		scene.background = new THREE.Color("black"); // Set background color to black
+		scene.background = new THREE.Color("black"); 
 		camera.lookAt(0, 1, 0);
 
 		clock = new THREE.Clock();
